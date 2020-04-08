@@ -24,7 +24,7 @@ def open_file
 end
 
 def write_to_file(text)
-    File.write("stackoverflow.md", fix_markdown(text), mode: "a")
+    File.write("stackoverflow.md", text, mode: "a")
 end
 
 def get_user_name(answer)
@@ -32,10 +32,10 @@ def get_user_name(answer)
     answer['ownerUserId'] > 0 ? SO_USERS.find { |user| user['id'] == answer['ownerUserId']}['realName'] : "Community User"
 end
 
+# not called yet
 def fix_markdown(text)
     fixed_text = text
     tic_count = text.count("```")
-    puts tic_count
     fixed_text = "#{fixed_text}\n```" if tic_count.odd? 
     fixed_text
 end
@@ -50,7 +50,7 @@ def extract_question_data
         write_to_file "#{answers_for_question.length} #{answers_for_question.length == 1 ? 'Answer' : 'Answers'}\n\n" 
         answers_for_question.each_with_index do |answer,index|
             userName = get_user_name(answer)
-            write_to_file "Answer #{index+1} by #{userName}\n\n"
+            write_to_file "Answer #{index+1} by #{userName} #{question['acceptedAnswerId'] == answer['id'] ? '(Accepted Answer)' : ''}\n\n"
             write_to_file "#{answer['bodyMarkdown']}\n" 
         end
     end
