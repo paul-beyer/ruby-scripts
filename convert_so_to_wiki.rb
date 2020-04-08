@@ -53,12 +53,14 @@ end
 
 def extract_question_data(questions, answers, comments)
     questions.each do |question|
-        title = question["title"]
-        body = question["bodyMarkdown"]
+        title = question['title']
+        body = question['bodyMarkdown']
         write_to_file "\# #{title}\n\n"
         write_to_file "#{body} \n\n"
+        tags = question['tags'].split('|')
+        write_to_file("Tags - #{tags[1..].join(', ')} \n\n")
         write_comments(comments, question['id']) 
-        answers_for_question = answers[question["id"]] || []
+        answers_for_question = answers[question['id']] || []
         write_to_file "### #{answers_for_question.length} #{answers_for_question.length == 1 ? 'Answer' : 'Answers'}\n\n" 
         answers_for_question.each_with_index do |answer,index|
             userName = get_user_name(answer)
